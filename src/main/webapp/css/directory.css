@@ -1,0 +1,30 @@
+.directory {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    width:100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    font:14px/18px 'consolas';
+}
+.file {
+    display: flex;
+    flex-direction: row;
+
+    width:100%;
+    cursor: pointer;
+    margin: 5px 5px 0 5px;
+    color: #666;
+}
+.icon {
+    width: 32px;
+    height: 32px;
+}
+.name {
+    line-height: 32px;
+    font-size: 16px;
+    margin-left: 5px;
+}

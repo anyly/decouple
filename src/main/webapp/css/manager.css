@@ -1,0 +1,61 @@
+.container>* {
+    margin-top: 10px;
+}
+.container:last-child {
+    margin-top: 0;
+}
+.fileManager, .data {
+    width: 500px;
+}
+.fileManager {
+    border: 1px blue dashed;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    background-color: #ECECEC;
+}
+.fileManager>input[type="file"] {
+    margin: 15px;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1 1 200px;
+}
+.message {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.status {
+    color: chocolate;
+    font-weight: bolder;
+}
+#error {
+    font-weight: bolder;
+}
+.data {
+    padding: 5px;
+    flex: 1 1 200px;
+    min-height: 200px;
+    border-radius: 6px;
+    border: 1px solid brown;
+    resize:both;
+    overflow:auto;
+}
+.submit {
+    font-size: 20px;
+    width: 100%;
+    height: 50px;
+    border-radius: 4px;
+    color: yellow;
+    background-color: brown;
+}
