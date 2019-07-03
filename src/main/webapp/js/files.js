@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var newUrl = location.pathname.replace("/manager/", "/files/");
+    var newUrl = location.pathname.replace("/files/", "/api/");
     newUrl = location.protocol+'//'+location.host + newUrl
     $('#goto').attr('href', newUrl).html(newUrl);
 

@@ -12,10 +12,10 @@ import java.util.List;
 
 @Service
 public class FileService {
-    private static final String FileDirectory = "/files";
+    private static final String FileDirectory = "/api";
 
     public String filePath(HttpServletRequest request) {
-        String path = request.getServletPath().replaceAll("^/manager", FileDirectory);
+        String path = request.getServletPath().replaceAll("^/files", FileDirectory);
         return request.getServletContext().getRealPath(path);
     }
 

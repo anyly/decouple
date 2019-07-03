@@ -17,7 +17,7 @@
 <body>
 <div class="container">
     <ul class="directory">
-        <% if (!request.getServletPath().equals("/manager")) { %>
+        <% if (!request.getServletPath().equals("/files")) { %>
         <li class="file" onclick="prev()">
             <img src="/images/directory.svg" class="icon">
             <span class="name">..</span>

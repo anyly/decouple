@@ -20,7 +20,7 @@ public class DataController {
      */
     @GetMapping("/**")
     public String getData(HttpServletRequest request) {
-        String path = request.getServletPath().replaceAll("^/data", "/files");
+        String path = request.getServletPath().replaceAll("^/data", "/api");
         return path;
     }
 

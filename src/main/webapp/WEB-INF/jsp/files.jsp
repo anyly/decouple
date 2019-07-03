@@ -8,9 +8,9 @@
     <title>Decouple Toolkit</title>
     <link rel="stylesheet" href="/css/base.css" type="text/css" />
     <script src="/js/base.js"></script>
-    <link rel="stylesheet" href="/css/manager.css" type="text/css" />
+    <link rel="stylesheet" href="/css/files.css" type="text/css" />
     <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/manager.js"></script>
+    <script src="/js/files.js"></script>
     <link rel="stylesheet" href="/css/jsonkit.css" type="text/css" />
     <script src="/js/jsonkit.js"></script>
 </head>

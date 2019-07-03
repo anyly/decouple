@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 @Controller
-@RequestMapping("/manager")
+@RequestMapping("/files")
 public class ManagerController {
     @Autowired
     private FileService fileService;
@@ -63,7 +63,7 @@ public class ManagerController {
      */
     private ModelAndView file(HttpServletRequest request) {
         JSONObject jsonObject = fileService.readJSONObject(request);
-        ModelAndView modelAndView = new ModelAndView("manager");
+        ModelAndView modelAndView = new ModelAndView("files");
         modelAndView.addObject("data", jsonObject);
         return modelAndView;
     }
