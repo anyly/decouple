@@ -7,17 +7,17 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class FileService {
-    private static final String StaticDirectory;
+    private static final String RootDirectory = System.getProperty("user.dir");
     private static final String DirectoryName = "/api";
     private static final String ApiDirectory;
     static {
-        StaticDirectory = FileService.class.getResource("/static").getPath();
-        ApiDirectory = StaticDirectory + "/api";
+        ApiDirectory = RootDirectory + "/api";
 
         System.out.println("ApiDirectory: " + ApiDirectory);
 
@@ -29,7 +29,7 @@ public class FileService {
 
     public String filePath(HttpServletRequest request) {
         String path = request.getServletPath().replaceAll("^/files", DirectoryName);
-        return StaticDirectory + path;
+        return RootDirectory + path;
     }
 
     public String readContent(HttpServletRequest request) {
