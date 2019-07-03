@@ -63,8 +63,12 @@ public class ManagerController {
      */
     private ModelAndView file(HttpServletRequest request) {
         JSONObject jsonObject = fileService.readJSONObject(request);
+        String JSONString = "";
+        if (jsonObject != null) {
+            JSONString = jsonObject.toJSONString();
+        }
         ModelAndView modelAndView = new ModelAndView("files");
-        modelAndView.addObject("data", jsonObject);
+        modelAndView.addObject("data", JSONString);
         return modelAndView;
     }
 

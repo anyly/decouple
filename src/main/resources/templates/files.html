@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=750, user-scalable=yes">
@@ -16,9 +15,10 @@
 </head>
 <body>
 <div class="container">
-    <p class="top">
-        API：<a id="goto" target="_blank" href=""></a>
-    </p>
+    <div class="top">
+        <div onclick="prev()" style="cursor: pointer;color: brown;">上级目录</div> &nbsp;|&nbsp;
+        <div>API <a id="goto" target="_blank" href=""></a></div>
+    </div>
     <div class="fileManager">
         <input class="file" type="file" />
     </div>
@@ -34,8 +34,8 @@
         <input class="submit" type="button" value="提交" />
     </div>
 </div>
-<script>
-    loadData('<%=request.getAttribute("data")==null?"":request.getAttribute("data").toString().trim()%>');
+<script th:inline="javascript">
+    loadData([[${data}]]);
 </script>
 </body>
 </html>

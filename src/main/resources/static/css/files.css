@@ -4,8 +4,17 @@
 .container:last-child {
     margin-top: 0;
 }
-.fileManager, .data {
-    width: 500px;
+.container:last-child {
+    margin-bottom: 10px;
+}
+
+.fileManager, .data, .top {
+    width: 700px;
+}
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 .fileManager {
     border: 1px blue dashed;

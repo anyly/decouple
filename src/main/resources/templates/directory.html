@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750, user-scalable=yes">
+
+    <title>Decouple Toolkit</title>
+    <link rel="stylesheet" href="/css/base.css" type="text/css" />
+    <script src="/js/base.js"></script>
+    <link rel="stylesheet" href="/css/directory.css" type="text/css" />
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/directory.js"></script>
+</head>
+<body>
+<div class="container">
+    <ul class="directory">
+        <li class="file" onclick="prev()">
+            <img src="/images/directory.svg" class="icon">
+            <span class="name">..</span>
+        </li>
+        <li class="file"
+            th:each="fileObject:${listFiles}"
+            th:onclick="entry([[${fileObject.name}]])">
+                <img src="/images/file.svg" class="icon" th:if="${fileObject.type}" />
+                <img src="/images/directory.svg" class="icon" th:if="!${fileObject.type}" />
+            <span class="name" th:text="${fileObject.name}"></span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
