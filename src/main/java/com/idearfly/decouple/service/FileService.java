@@ -18,6 +18,13 @@ public class FileService {
     static {
         StaticDirectory = FileService.class.getResource("/static").getPath();
         ApiDirectory = StaticDirectory + "/api";
+
+        System.out.println("ApiDirectory: " + ApiDirectory);
+
+        File file = new File(ApiDirectory);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
 
     public String filePath(HttpServletRequest request) {
