@@ -161,10 +161,23 @@ public class FileService {
     public Boolean deleteJSONObject(HttpServletRequest request) {
         String path = filePath(request);
         File file = new File(path);
-        if (file.exists()) {
+        return deleteFile(file);
+    }
+
+    private Boolean deleteFile(File file) {
+        if (!file.exists()) {
+            return false;
+        }
+
+        if (file.isFile()) {
+            return file.delete();
+        } else {
+            File[] files = file.listFiles();
+            for (File f : files) {
+                deleteFile(f);
+            }
             return file.delete();
         }
-        return false;
     }
 
     private void mkdirs(File file) {

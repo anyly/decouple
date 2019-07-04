@@ -14,8 +14,10 @@
 <body>
 <div class="container">
     <div class="top">
+        <img src="/images/parent.svg" class="parent" onclick="parentPath()" />
         <span>目录：</span>
-        <span class="path" onclick="prev()"></span>
+        <input type="text" class="path" onkeydown="inputPath(event)" onchange="applyPath()" />
+        <img src="/images/enter.svg" class="enter" onclick="applyPath()"/>
     </div>
     <ul class="directory">
         <!--
@@ -26,10 +28,17 @@
         -->
         <li class="file"
             th:each="fileObject:${listFiles}"
-            th:onclick="entry([[${fileObject.name}]])">
+            th:attr="filename=${fileObject.name}, filetype=${fileObject.type}"
+            onmouseover="showExtend(this)"
+            onmouseout="hideExtend(this)">
+            <div class="base" onclick="entryFile(this)">
                 <img src="/images/file.svg" class="icon" th:if="${fileObject.type}" />
                 <img src="/images/directory.svg" class="icon" th:if="!${fileObject.type}" />
-            <span class="name" th:text="${fileObject.name}"></span>
+                <span class="name" th:text="${fileObject.name}"></span>
+            </div>
+            <div class="extend">
+                <img src="/images/delete.svg" class="icon" onclick="removeFile(this);" />
+            </div>
         </li>
     </ul>
 </div>
