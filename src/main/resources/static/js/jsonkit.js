@@ -1,6 +1,5 @@
 //格式化代码函数,已经用原生方式写好了不需要改动,直接引用就好
 var formatJson = function (json, options) {
-    json = json.replace(/[\u00A0]/g, '');//过滤特殊字符
     var reg = null,
         formatted = '',
         pad = 0,
@@ -15,26 +14,26 @@ var formatJson = function (json, options) {
         json = JSON.stringify(json);
     }
     reg = /([\{\}])/g;
-    json = json.replace(reg, '\r\n$1\r\n');
+    json = json.replace(reg, '\n$1\n');
     reg = /([\[\]])/g;
-    json = json.replace(reg, '\r\n$1\r\n');
+    json = json.replace(reg, '\n$1\n');
     reg = /(\,)/g;
-    json = json.replace(reg, '$1\r\n');
-    reg = /(\r\n\r\n)/g;
-    json = json.replace(reg, '\r\n');
-    reg = /\r\n\,/g;
+    json = json.replace(reg, '$1\n');
+    reg = /(\n\n)/g;
+    json = json.replace(reg, '\n');
+    reg = /\n\,/g;
     json = json.replace(reg, ',');
     if (!options.newlineAfterColonIfBeforeBraceOrBracket) {
-        reg = /\:\r\n\{/g;
+        reg = /\:\n\{/g;
         json = json.replace(reg, ':{');
-        reg = /\:\r\n\[/g;
+        reg = /\:\n\[/g;
         json = json.replace(reg, ':[');
     }
     if (options.spaceAfterColon) {
         reg = /\:/g;
         json = json.replace(reg, ':');
     }
-    (json.split('\r\n')).forEach(function (node, index) {
+    (json.split('\n')).forEach(function (node, index) {
         //console.log(node);
         var i = 0,
             indent = 0,
@@ -54,7 +53,7 @@ var formatJson = function (json, options) {
             padding += PADDING;
         }
 
-        formatted += padding + node + '\r\n';
+        formatted += padding + node + '\n';
         pad += indent;
     });
     return formatted;
@@ -76,21 +75,20 @@ function JSONColor(opt) {
     try {
         Canvas.innerHTML = '<pre>'+text+'</pre>';
 
-        var json = formatJson(text);
-        console.log(json);
+        var json = text.replace(/\u00A0/g, "$1");//过滤特殊字符
 
-        if (json == "") {
-            json = '""';
+        var obj = json;
+        if (json != "") {
+            obj = JSON.parse(json);
         }
-        var obj = eval("[" + text + "]");
-        var html = JSONColorObject(obj[0], 0, false, false, false);
+        var html = JSONColorObject(obj, 0, false, false, false);
         Canvas.innerHTML = "<PRE class='CodeContainer'>" + html + "</PRE>";
         if (ErrorId) {
             Error.className = 'Good';
             Error.innerHTML = '格式正确';
         }
     } catch(e) {
-        console.error(e);
+        //console.error(e);
         if (ErrorId) {
             Error.className = 'Bad';
             Error.innerHTML = e.message;
