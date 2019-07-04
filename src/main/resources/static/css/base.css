@@ -41,4 +41,5 @@ ul, li {
 }
 .path {
     color: chocolate;
+    cursor: pointer;
 }

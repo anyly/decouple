@@ -15,13 +15,15 @@
 <div class="container">
     <div class="top">
         <span>目录：</span>
-        <span class="path"></span>
+        <span class="path" onclick="prev()"></span>
     </div>
     <ul class="directory">
+        <!--
         <li class="file" onclick="prev()">
             <img src="/images/directory.svg" class="icon">
             <span class="name">..</span>
         </li>
+        -->
         <li class="file"
             th:each="fileObject:${listFiles}"
             th:onclick="entry([[${fileObject.name}]])">
