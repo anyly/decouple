@@ -5,12 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/data")
-public class DataController {
+@RequestMapping("/api")
+public class ApiController {
     @Autowired
     private FileService fileService;
 
@@ -19,9 +20,9 @@ public class DataController {
      * @return
      */
     @GetMapping("/**")
+    @ResponseBody
     public String getData(HttpServletRequest request) {
-        String path = request.getServletPath().replaceAll("^/data", "/api");
-        return path;
+        return fileService.readContent(request);
     }
 
 

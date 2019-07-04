@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=750, user-scalable=yes">
 
     <title>Decouple Toolkit</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="/css/base.css" type="text/css" />
     <script src="/js/base.js"></script>
     <link rel="stylesheet" href="/css/directory.css" type="text/css" />
-    <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/directory.js"></script>
 </head>
 <body>
 <div class="container">
+    <div class="top">
+        <span>目录：</span>
+        <span class="path"></span>
+    </div>
     <ul class="directory">
         <li class="file" onclick="prev()">
             <img src="/images/directory.svg" class="icon">

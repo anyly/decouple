@@ -7,14 +7,13 @@
 .container:last-child {
     margin-bottom: 10px;
 }
-
-.fileManager, .data, .top {
-    width: 700px;
-}
-.top {
+.bar {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+}
+.fileManager, .data, .bar {
+    width: 700px;
 }
 .fileManager {
     border: 1px blue dashed;

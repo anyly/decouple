@@ -30,3 +30,15 @@ ul, li {
 
     background-color: white;
 }
+
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width:100%;
+    color: olivedrab;
+    border-bottom: 1px olivedrab solid;
+}
+.path {
+    color: chocolate;
+}

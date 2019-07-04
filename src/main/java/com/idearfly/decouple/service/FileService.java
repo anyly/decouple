@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +35,14 @@ public class FileService {
         String path = filePath(request);
         FileInputStream fileInputStream = null;
         BufferedReader reader = null;
-        String laststr = null;
+        StringBuilder laststr = new StringBuilder();
         try{
             fileInputStream = new FileInputStream(path);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
             reader = new BufferedReader(inputStreamReader);
             String tempString = null;
             while((tempString = reader.readLine()) != null){
-                laststr += tempString;
+                laststr.append(tempString);
             }
             reader.close();
         }catch(IOException e){
@@ -64,7 +63,7 @@ public class FileService {
                 }
             }
         }
-        return laststr;
+        return laststr.toString();
     }
 
     public String writeContent(HttpServletRequest request, String text) {

@@ -1,3 +1,9 @@
+$(document).ready(function () {
+    var path = location.pathname;
+    path = path.replace(/^\/files/, '');
+    path = path==''?'/':path;
+    $('.path').html(path);
+});
 
 function request(opt) {
     $.ajax(opt);
