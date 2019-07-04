@@ -1,5 +1,6 @@
 //格式化代码函数,已经用原生方式写好了不需要改动,直接引用就好
 var formatJson = function (json, options) {
+    json = json.replace(/[\u00A0]/g, '');//过滤特殊字符
     var reg = null,
         formatted = '',
         pad = 0,
@@ -58,26 +59,6 @@ var formatJson = function (json, options) {
     });
     return formatted;
 };
-//引用示例部分
-//(1)创建json格式或者从后台拿到对应的json格式
-//var originalJson = {"name": "binginsist", "sex": "男", "age": "25"};
-//下面用一个真实的json数据做测试
-// var originalJson = {
-//     "_errmsg":"ok",
-//     "result":[
-//     ],
-//     "stat":"wechat",
-//     "_token":"",
-//     "weixinId":"900504",
-//     "_errcode":"0",
-//     "regionId":"00000000"
-// }
-
-//(2)调用formatJson函数,将json格式进行格式化
-// var resultJson = formatJson(originalJson);
-//(3)将格式化好后的json写入页面中
-// document.getElementById("writePlace").innerHTML = '<pre>' +resultJson + '<pre/>';
-
 
 //着色
 window.TAB = "    ";
@@ -101,7 +82,7 @@ function JSONColor(opt) {
         if (json == "") {
             json = '""';
         }
-        var obj = eval("[" + json + "]");
+        var obj = eval("[" + text + "]");
         var html = JSONColorObject(obj[0], 0, false, false, false);
         Canvas.innerHTML = "<PRE class='CodeContainer'>" + html + "</PRE>";
         if (ErrorId) {
@@ -109,6 +90,7 @@ function JSONColor(opt) {
             Error.innerHTML = '格式正确';
         }
     } catch(e) {
+        console.error(e);
         if (ErrorId) {
             Error.className = 'Bad';
             Error.innerHTML = e.message;
