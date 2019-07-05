@@ -5,7 +5,9 @@ $(document).ready(function () {
 function entryFile($this) {
     var parent = $($this).parents('.file');
     var filename = parent.attr('filename');
-    location.pathname += '/'+filename;
+    var current = location.pathname;
+    current = current.replace(/\/$/, '');
+    location.pathname = current + '/' + filename;
 }
 
 function showExtend($this) {

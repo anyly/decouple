@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.idearfly.decouple.service.FileService;
 import com.idearfly.decouple.vo.FileObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/files")
+@CrossOrigin
 public class ManagerController {
     @Autowired
     private FileService fileService;
