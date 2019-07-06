@@ -14,18 +14,12 @@
 <body>
 <div class="container">
     <div class="top">
-        <img src="/images/parent.svg" class="parent" onclick="parentPath()" />
+        <img src="/images/parent.svg" title="上级目录" class="parent" onclick="parentPath()" />
         <span>目录：</span>
         <input type="text" class="path" onkeydown="inputPath(event)" onchange="applyPath()" />
         <img src="/images/enter.svg" class="enter" onclick="applyPath()"/>
     </div>
     <ul class="directory">
-        <!--
-        <li class="file" onclick="prev()">
-            <img src="/images/directory.svg" class="icon">
-            <span class="name">..</span>
-        </li>
-        -->
         <li class="file"
             th:each="fileObject:${listFiles}"
             th:attr="filename=${fileObject.name}, filetype=${fileObject.type}"
@@ -34,10 +28,11 @@
             <div class="base" onclick="entryFile(this)">
                 <img src="/images/file.svg" class="icon" th:if="${fileObject.type}" />
                 <img src="/images/directory.svg" class="icon" th:if="!${fileObject.type}" />
-                <span class="name" th:text="${fileObject.name}"></span>
+                <input class="name" disabled th:value="${fileObject.name}" onblur="disableInput(this)" onchange="renameFile(this)" />
             </div>
             <div class="extend">
-                <img src="/images/delete.svg" class="icon" onclick="removeFile(this);" />
+                <img src="/images/delete.svg" title="删除" class="icon" onclick="removeFile(this);" />
+                <img src="/images/rename.svg" title="重命名" class="icon" onclick="enableInput(this);" />
             </div>
         </li>
     </ul>

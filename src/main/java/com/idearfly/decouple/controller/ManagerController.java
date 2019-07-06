@@ -19,12 +19,22 @@ public class ManagerController {
     private FileService fileService;
 
     /**
-     * 修改数据
+     * 重命名资源
+     * @return
+     */
+    @PostMapping("/rename")
+    @ResponseBody
+    public Boolean rename(HttpServletRequest request, @RequestParam String from, @RequestParam String to) {
+        return fileService.rename(request, from, to);
+    }
+
+    /**
+     * 创建或修改资源
      * @return
      */
     @PutMapping("/**")
     @ResponseBody
-    public JSONObject putData(HttpServletRequest request, @RequestParam("data") String data) {
+    public JSONObject put(HttpServletRequest request, @RequestParam("data") String data) {
         JSONObject jsonObject = JSONObject.parseObject(data);
         fileService.writeJSONObject(request, jsonObject);
 
@@ -32,21 +42,21 @@ public class ManagerController {
     }
 
     /**
-     * 删除数据
+     * 删除资源
      * @return
      */
     @DeleteMapping("/**")
     @ResponseBody
-    public Boolean deleteData(HttpServletRequest request) {
-        return fileService.deleteJSONObject(request);
+    public Boolean delete(HttpServletRequest request) {
+        return fileService.delete(request);
     }
 
     /**
-     * 读取数据
+     * 读取资源
      * @return
      */
     @GetMapping("/**")
-    public ModelAndView getData(HttpServletRequest request) {
+    public ModelAndView get(HttpServletRequest request) {
         String currentPath = fileService.filePath(request);
         File currentFile = new File(currentPath);
         if (currentFile.isDirectory()) {

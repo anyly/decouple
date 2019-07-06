@@ -41,3 +41,35 @@ function removeFile($this) {
         }
     })
 }
+function enableInput($this) {
+    var parent = $($this).parents('.file');
+    parent.find('.name').removeAttr('disabled').select().click(function (event) {
+        event.stopPropagation();
+    });
+}
+function disableInput($this) {
+    $($this).attr('disabled', 'true').unbind('click');
+}
+function renameFile($this) {
+    var self = $($this);
+    var to = self.val();
+    var parent = self.parents('.file');
+    var filename = parent.attr('filename');
+    request({
+        url: '/files/rename',
+        data: {
+            from: location.pathname+'/'+filename,
+            to: location.pathname+'/'+to,
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function(response) {
+            if (response) {
+                parent.attr('filename', to);
+            } else {
+                alert('重命名失败');
+                self.val(filename);
+            }
+        }
+    });
+}

@@ -27,7 +27,11 @@ public class FileService {
     }
 
     public String filePath(HttpServletRequest request) {
-        String path = request.getServletPath().replaceAll("^/files", DirectoryName);
+        return filePath(request.getServletPath());
+    }
+
+    public String filePath(String servletPath) {
+        String path = servletPath.replaceAll("^/files", DirectoryName);
         return RootDirectory + path;
     }
 
@@ -158,10 +162,19 @@ public class FileService {
         return list;
     }
 
-    public Boolean deleteJSONObject(HttpServletRequest request) {
+    public Boolean delete(HttpServletRequest request) {
         String path = filePath(request);
         File file = new File(path);
         return deleteFile(file);
+    }
+
+    public Boolean rename(HttpServletRequest request, String from, String to) {
+        String fromPath = filePath(from);
+        String toPath = filePath(to);
+        File fromFile = new File(fromPath);
+        File toFile = new File(toPath);
+        mkdirs(toFile);
+        return fromFile.renameTo(toFile);
     }
 
     private Boolean deleteFile(File file) {
