@@ -56,7 +56,7 @@ function renameFile($this) {
     var parent = self.parents('.file');
     var filename = parent.attr('filename');
     request({
-        url: '/files/rename',
+        url: httpManager+'/rename',
         data: {
             from: location.pathname+'/'+filename,
             to: location.pathname+'/'+to,

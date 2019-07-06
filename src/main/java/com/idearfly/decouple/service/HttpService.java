@@ -2,6 +2,7 @@ package com.idearfly.decouple.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.util.IOUtils;
+import com.idearfly.decouple.Configuration;
 import com.idearfly.decouple.vo.FileObject;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FileService {
+public class HttpService {
     private static final String RootDirectory = System.getProperty("user.dir");
-    private static final String DirectoryName = "/api";
     private static final String ApiDirectory;
     static {
-        ApiDirectory = RootDirectory + "/api";
+        ApiDirectory = RootDirectory + Configuration.httpApi;
 
         System.out.println("ApiDirectory: " + ApiDirectory);
 
@@ -31,7 +31,7 @@ public class FileService {
     }
 
     public String filePath(String servletPath) {
-        String path = servletPath.replaceAll("^/files", DirectoryName);
+        String path = servletPath.replaceAll("^"+ Configuration.httpManager, Configuration.httpApi);
         return RootDirectory + path;
     }
 

@@ -1,7 +1,8 @@
-package com.idearfly.decouple.controller;
+package com.idearfly.decouple.controller.ws;
 
 import com.alibaba.fastjson.JSONObject;
-import com.idearfly.decouple.service.FileService;
+import com.idearfly.decouple.Configuration;
+import com.idearfly.decouple.service.HttpService;
 import com.idearfly.decouple.vo.FileObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +13,11 @@ import java.io.File;
 import java.util.List;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping(Configuration.wsManager)
 @CrossOrigin
-public class ManagerController {
+public class WsManagerController {
     @Autowired
-    private FileService fileService;
+    private HttpService httpService;
 
     /**
      * 重命名资源
@@ -25,7 +26,7 @@ public class ManagerController {
     @PostMapping("/rename")
     @ResponseBody
     public Boolean rename(HttpServletRequest request, @RequestParam String from, @RequestParam String to) {
-        return fileService.rename(request, from, to);
+        return httpService.rename(request, from, to);
     }
 
     /**
@@ -36,7 +37,7 @@ public class ManagerController {
     @ResponseBody
     public JSONObject put(HttpServletRequest request, @RequestParam("data") String data) {
         JSONObject jsonObject = JSONObject.parseObject(data);
-        fileService.writeJSONObject(request, jsonObject);
+        httpService.writeJSONObject(request, jsonObject);
 
         return jsonObject;
     }
@@ -48,7 +49,7 @@ public class ManagerController {
     @DeleteMapping("/**")
     @ResponseBody
     public Boolean delete(HttpServletRequest request) {
-        return fileService.delete(request);
+        return httpService.delete(request);
     }
 
     /**
@@ -57,7 +58,7 @@ public class ManagerController {
      */
     @GetMapping("/**")
     public ModelAndView get(HttpServletRequest request) {
-        String currentPath = fileService.filePath(request);
+        String currentPath = httpService.filePath(request);
         File currentFile = new File(currentPath);
         if (currentFile.isDirectory()) {
             return directory(request);
@@ -72,7 +73,7 @@ public class ManagerController {
      * @return
      */
     private ModelAndView file(HttpServletRequest request) {
-        JSONObject jsonObject = fileService.readJSONObject(request);
+        JSONObject jsonObject = httpService.readJSONObject(request);
         String JSONString = "";
         if (jsonObject != null) {
             JSONString = jsonObject.toJSONString();
@@ -89,7 +90,7 @@ public class ManagerController {
      * @return
      */
     private ModelAndView directory(HttpServletRequest request) {
-        List<FileObject> fileObjectList = fileService.listFiles(request);
+        List<FileObject> fileObjectList = httpService.listFiles(request);
         ModelAndView modelAndView = new ModelAndView("directory");
         modelAndView.addObject("listFiles", fileObjectList);
         return modelAndView;

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var path = location.pathname;
-    path = path.replace(/^\/files/, '');
+    var reg = new RegExp("^(?:"+httpManager+"|"+wsManager+")", 'g');
+    path = path.replace(reg, '');
     path = path==''?'/':path;
     $('.path').val(path);
 });
@@ -10,7 +11,8 @@ function request(opt) {
 }
 
 function parentPath() {
-    var url = location.pathname.replace(/(^\/files\/?.*)\/(.+$)?/g, "$1");
+    var reg = RegExp("(^(?:"+httpManager+"|"+wsManager+")/?.*)/(.+$)?", 'g');
+    var url = location.pathname.replace(reg, "$1");
     location.pathname = url;
 }
 
@@ -28,5 +30,5 @@ function applyPath() {
     var path = input.val();
     path = /^\//g.test(path)?path:'/'+path;
     path = path.replace(/\/+/g, '/');
-    location.pathname = '/files' + path;
+    location.pathname = httpManager + path;
 }

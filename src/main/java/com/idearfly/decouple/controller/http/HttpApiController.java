@@ -1,17 +1,18 @@
-package com.idearfly.decouple.controller;
+package com.idearfly.decouple.controller.http;
 
-import com.idearfly.decouple.service.FileService;
+import com.idearfly.decouple.Configuration;
+import com.idearfly.decouple.service.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Configuration.httpApi)
 @CrossOrigin
-public class ApiController {
+public class HttpApiController {
     @Autowired
-    private FileService fileService;
+    private HttpService httpService;
 
     /**
      * 读取数据
@@ -20,7 +21,7 @@ public class ApiController {
     @GetMapping("/**")
     @ResponseBody
     public String getData(HttpServletRequest request) {
-        return fileService.readContent(request);
+        return httpService.readContent(request);
     }
 
 

@@ -8,8 +8,8 @@
     <script src="/js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="/css/base.css" type="text/css" />
     <script src="/js/base.js"></script>
-    <link rel="stylesheet" href="/css/files.css" type="text/css" />
-    <script src="/js/files.js"></script>
+    <link rel="stylesheet" href="/css/file.css" type="text/css" />
+    <script src="/js/file.js"></script>
     <link rel="stylesheet" href="/css/jsonkit.css" type="text/css" />
     <script src="/js/jsonkit.js"></script>
 </head>
@@ -39,6 +39,12 @@
         <input class="submit" type="button" value="提交" />
     </div>
 </div>
+<script th:inline="javascript">
+var httpManager=[[${httpManager}]];
+var httpApi=[[${httpApi}]];
+var wsManager=[[${wsManager}]];
+var wsApi=[[${wsApi}]];
+</script>
 <script th:inline="javascript">
     loadData([[${data}]]);
 </script>
