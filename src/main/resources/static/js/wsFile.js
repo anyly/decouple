@@ -1,48 +1,53 @@
 $(document).ready(function () {
+(function() {
     var support = fileSupport['ws'];
-    var newUrl = location.pathname.replace(support.manager, support.api);
-    newUrl = location.protocol+'//'+location.host + newUrl
-    $('#goto').attr('href', newUrl).html(newUrl);
+    var newText = location.pathname.replace(support.manager, support.api);
+    var newUrl = location.pathname.replace(support.manager, '/wsRoom');
+    newText = location.protocol+'//'+location.host + newText;
+    newUrl = location.protocol+'//'+location.host + newUrl;
+    $('#goto').attr('href', newUrl).html(newText);
+})()
 
-    $('.file').change(readFileContent);
+$('.file').change(readFileContent);
 
-    $('.data').blur(checkFormat);
+$('.data').blur(checkFormat);
 
-    $('.submit').click(function() {
-        var checkedTab = $('.tab.checked');
-        if (!checkedTab.length) {
-            alert('请先创建tab标签！');
-            return;
+$('.submit').click(function() {
+    var checkedTab = $('.tab.checked');
+    if (!checkedTab.length) {
+        alert('请先创建tab标签！');
+        return;
+    }
+    var oldKey = checkedTab.attr('key');
+    var input = checkedTab.find('input[type=text]');
+    var newKey = input.val();
+    if (newKey=='') {
+        alert('tab标签名不能为空！');
+        setTimeout(function() {
+            input.trigger('dblclick');
+        },0);
+        return;
+    }
+
+    var error = $('#error');
+    if (error.hasClass('Bad')) {
+        alert(error.text());
+        return;
+    }
+
+    var data = $('.data').text().trim();
+    if (data == '') {
+        if ($('#status').text()=='修改' && confirm('是否要删除？')) {
+            deleteData(oldKey);
+        } else {
+            alert('请输入json文本！');
         }
-        var oldKey = checkedTab.attr('key');
-        var input = checkedTab.find('input[type=text]');
-        var newKey = input.val();
-        if (newKey=='') {
-            alert('tab标签名不能为空！');
-            setTimeout(function() {
-                input.trigger('dblclick');
-            },0);
-            return;
-        }
+        return;
+    }
 
-        var error = $('#error');
-        if (error.hasClass('Bad')) {
-            alert(error.text());
-            return;
-        }
+    putData(oldKey, newKey, data);
+});
 
-        var data = $('.data').text().trim();
-        if (data == '') {
-            if ($('#status').text()=='修改' && confirm('是否要删除？')) {
-                deleteData(oldKey);
-            } else {
-                alert('请输入json文本！');
-            }
-            return;
-        }
-
-        putData(oldKey, newKey, data);
-    });
 });
 
 function loadJSON(data) {

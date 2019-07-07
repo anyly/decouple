@@ -112,3 +112,14 @@
     background-color: brown;
     font-size: 20px;
 }
+.bar {
+    width: 700px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.menu {
+    width: 25px;
+    height: 25px;
+}

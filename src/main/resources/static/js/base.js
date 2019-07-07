@@ -1,9 +1,12 @@
 $(document).ready(function () {
+(function(){
     var path = location.pathname;
     var reg = new RegExp("^(?:"+regManager()+")", 'g');
     path = path.replace(reg, '');
     path = path==''?'/':path;
     $('.path').val(path);
+})()
+
 });
 function regManager() {
     var pattern = '';

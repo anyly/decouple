@@ -1,11 +1,42 @@
 $(document).ready(function () {
-    var newUrl = location.pathname.replace(httpManager, httpApi);
-    newUrl = location.protocol+'//'+location.host + newUrl+location.search
-    $('#goto').attr('href', newUrl).html(newUrl);
+(function() {
+    var support = fileSupport['ws'];
+    var newText = location.pathname.replace('/wsRoom', support.api);
+    var newUrl = location.pathname.replace(support.manager, '/wsRoom');
+    newText = location.protocol+'//'+location.host + newText;
+    newUrl = location.protocol+'//'+location.host + newUrl;
+    $('#goto').attr('href', newUrl).html(newText);
+})();
 
-    $('#data').blur(checkFormat);
+$('#data').blur(checkFormat);
 
-    $('.submit').click(sendMessage);
+$('.submit').click(sendMessage);
+
+(function() {
+    var url = "ws://"+ location.host + location.pathname.replace(/^\/wsRoom/g, '/ws') + location.search;
+    var websocket = new WebSocket(url);
+    websocket.onopen=function (event) {
+        console.log('onopen');
+    };
+    websocket.onmessage=function (event) {
+        // 收到消息去加载
+        console.log('onmessage:'+event.data);
+        var message = JSON.parse(event.data);
+        loadMessage(message);
+    };
+    websocket.onerror=function (event) {
+        console.log('onerror');
+    };
+    websocket.onclose=function (event) {
+        console.log('onclose');
+    };
+    window.sendMessage=function (data) {
+        var text = JSON.stringify(data);
+        websocket.send(text);
+        console.log('sendMessage:'+text);
+    }
+})();
+
 });
 function initData(data) {
     window.data=data;
@@ -53,26 +84,13 @@ function sendMessage() {
         return;
     }
     var message = {
-        from: 'system',
+        from: window.name,
         to: 'all',
         avatar: null,
         content: JSON.parse(data)
     };
     loadMessage(message);
-    /* websocket
-    var url = location.pathname;
-    request({
-        url: url,
-        data: {
-            data: data
-        },
-        dataType: 'json',
-        type: 'put',
-        success: function(response) {
-            loadStatus(data);
-            alert('保存成功');
-        }
-    });*/
+    sendMessage(message);
 }
 
 function loadMessage(message) {
@@ -94,20 +112,20 @@ function loadMessage(message) {
     content
 }
 */
-function messageDom(opt) {
+function messageDom(message) {
     var css = 'left';
-    var name = opt.name;
-    if (opt.from=='system') {
+    var name = message.from;
+    if (name == window.name) {
         css = 'right';
-        name = '';
+        //name = '';
     }
     var avatar = '/images/avatar.svg';
-    if (opt.avatar) {
-        avatar = opt.avatar;
+    if (message.avatar) {
+        avatar = message.avatar;
     }
     var content = '';
-    if (opt.content) {
-        content = JSON.stringify(opt.content);
+    if (message.content) {
+        content = JSON.stringify(message.content);
     }
     dom = $('<li class="item '+css+'">\
                           <img class="avatar" src="'+avatar+'"/>\

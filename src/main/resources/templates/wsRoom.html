@@ -26,25 +26,19 @@
         <div>API <a id="goto" target="_blank" href=""></a></div>
     </div>
     <ul class="list">
-        <li class="item">
-            <p class="name">测试1</p>
-            <a href="">进入房间</a>
-        </li>
-        <li class="item">
-            <p class="name">刷新侧边</p>
-            <a href="">进入房间</a>
-        </li>
-        <li class="item">
-            <p class="name">即时im</p>
-            <a href="">进入房间</a>
-        </li>
-        <li class="item">
-            <p class="name">我的测试</p>
-            <a href="">进入房间</a>
+        <li class="item"
+            th:each="entry : ${usecaseMap}"
+            th:attr="usecase=${entry.key}"
+            onclick="checkedItem(this)">
+            <p class="name" th:text="${entry.key}"></p>
+            <a href="javascript:void(0);" onclick="entryRoom(this)">进入房间</a>
         </li>
     </ul>
     <div class="footerbar">
-        <p><span>房间名：</span><input id="name" type="text" placeholder="请输入房间名" value="" /></p>
+        <p>
+            <span>昵称：</span><input id="name" type="text" placeholder="请输入昵称" value="" />
+            <span>房间名：</span><input id="usecase" type="text" placeholder="请输入房间名" value="" />
+        </p>
         <div class="submit">创建聊天</div>
     </div>
 </div>

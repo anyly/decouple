@@ -1,31 +1,34 @@
 $(document).ready(function () {
+(function(){
     var newUrl = location.pathname.replace(httpManager, httpApi);
     newUrl = location.protocol+'//'+location.host + newUrl
     $('#goto').attr('href', newUrl).html(newUrl);
+})()
 
-    $('.file').change(readFileContent);
+$('.file').change(readFileContent);
 
-    $('.data').blur(checkFormat);
+$('.data').blur(checkFormat);
 
-    $('.submit').click(function() {
-        var error = $('#error');
-        if (error.hasClass('Bad')) {
-            alert(error.text());
-            return;
+$('.submit').click(function() {
+    var error = $('#error');
+    if (error.hasClass('Bad')) {
+        alert(error.text());
+        return;
+    }
+
+    var data = $('.data').text().trim();
+    if (data == '') {
+        if ($('#status').text()=='修改' && confirm('是否要删除？')) {
+            deleteData();
+        } else {
+            alert('请输入json文本！');
         }
+        return;
+    }
 
-        var data = $('.data').text().trim();
-        if (data == '') {
-            if ($('#status').text()=='修改' && confirm('是否要删除？')) {
-                deleteData();
-            } else {
-                alert('请输入json文本！');
-            }
-            return;
-        }
+    putData(data);
+});
 
-        putData(data);
-    });
 });
 
 function loadJSON(data) {
