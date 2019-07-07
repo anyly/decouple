@@ -1,0 +1,130 @@
+.bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.fileManager, .data, .bar {
+    width: 700px;
+}
+.fileManager {
+    border: 1px blue dashed;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    background-color: #ECECEC;
+}
+.fileManager>input[type="file"] {
+    margin: 15px;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1 1 200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.message {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.status {
+    color: chocolate;
+    font-weight: bolder;
+}
+#error {
+    font-weight: bolder;
+}
+.data {
+    padding: 5px;
+    flex: 1 1 200px;
+    min-height: 200px;
+    border-radius: 6px;
+    border: 1px solid brown;
+    resize:both;
+    overflow:auto;
+}
+.submit {
+    font-size: 20px;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 4px;
+    color: yellow;
+    background-color: brown;
+}
+.tabloader {
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+.tabloader>* {
+    margin-right: 2px;
+}
+.tabloader:last-child {
+    margin-right: 0;
+}
+.tab {
+    width: 100px;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #ECECEC;
+    color:#ccc;
+    font-size:14px;
+    padding: 2px;
+    border-radius: 4px;
+    border: 1px solid #CECECE;
+}
+.tab.checked {
+    border: 1px solid #2F77F1;
+}
+.tab>input[type="text"] {
+    width: 80px;
+    background:none;
+    border: none;
+    color: #2F77F1;
+    caret-color: #2F77F1;
+    text-align: center;
+}
+.tab>input[type="text"].unsave {
+    color: green;
+    caret-color: green;
+    text-decoration: underline;
+}
+.tab>input[type="text"].error {
+    color: red;
+    caret-color: red;
+    text-decoration: line-through;
+}
+.tab>input[type="text"]:focus {
+    outline:none;
+}
+.tabloader img {
+    width: 16px;
+    height: 16px;
+}
+.tabloader>.add {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #ECECEC;
+    padding: 2px;
+    /*border-radius: 4px;*/
+    border: 1px solid #CECECE;
+}

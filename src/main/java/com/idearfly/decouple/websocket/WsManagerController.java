@@ -1,8 +1,7 @@
-package com.idearfly.decouple.controller.ws;
+package com.idearfly.decouple.websocket;
 
 import com.alibaba.fastjson.JSONObject;
-import com.idearfly.decouple.Configuration;
-import com.idearfly.decouple.service.HttpService;
+import com.idearfly.decouple.service.FileService;
 import com.idearfly.decouple.vo.FileObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +12,11 @@ import java.io.File;
 import java.util.List;
 
 @RestController
-@RequestMapping(Configuration.wsManager)
+@RequestMapping("/wsManager")
 @CrossOrigin
 public class WsManagerController {
     @Autowired
-    private HttpService httpService;
+    private FileService fileService;
 
     /**
      * 重命名资源
@@ -26,7 +25,7 @@ public class WsManagerController {
     @PostMapping("/rename")
     @ResponseBody
     public Boolean rename(HttpServletRequest request, @RequestParam String from, @RequestParam String to) {
-        return httpService.rename(request, from, to);
+        return fileService.rename(request, from, to);
     }
 
     /**
@@ -35,11 +34,13 @@ public class WsManagerController {
      */
     @PutMapping("/**")
     @ResponseBody
-    public JSONObject put(HttpServletRequest request, @RequestParam("data") String data) {
+    public JSONObject put(
+            HttpServletRequest request,
+            @RequestParam String oldKey,
+            @RequestParam String newKey,
+            @RequestParam String data) {
         JSONObject jsonObject = JSONObject.parseObject(data);
-        httpService.writeJSONObject(request, jsonObject);
-
-        return jsonObject;
+        return fileService.writeJSONObjectProperty(request, oldKey, newKey, jsonObject);
     }
 
     /**
@@ -48,8 +49,8 @@ public class WsManagerController {
      */
     @DeleteMapping("/**")
     @ResponseBody
-    public Boolean delete(HttpServletRequest request) {
-        return httpService.delete(request);
+    public JSONObject delete(HttpServletRequest request, @RequestParam String key) {
+        return fileService.deleteProperty(request, key);
     }
 
     /**
@@ -58,7 +59,7 @@ public class WsManagerController {
      */
     @GetMapping("/**")
     public ModelAndView get(HttpServletRequest request) {
-        String currentPath = httpService.filePath(request);
+        String currentPath = fileService.filePath(request);
         File currentFile = new File(currentPath);
         if (currentFile.isDirectory()) {
             return directory(request);
@@ -73,13 +74,9 @@ public class WsManagerController {
      * @return
      */
     private ModelAndView file(HttpServletRequest request) {
-        JSONObject jsonObject = httpService.readJSONObject(request);
-        String JSONString = "";
-        if (jsonObject != null) {
-            JSONString = jsonObject.toJSONString();
-        }
-        ModelAndView modelAndView = new ModelAndView("files");
-        modelAndView.addObject("data", JSONString);
+        JSONObject jsonObject = fileService.readJSONObject(request);
+        ModelAndView modelAndView = new ModelAndView("wsFile");
+        modelAndView.addObject("data", jsonObject);
         return modelAndView;
     }
 
@@ -90,7 +87,7 @@ public class WsManagerController {
      * @return
      */
     private ModelAndView directory(HttpServletRequest request) {
-        List<FileObject> fileObjectList = httpService.listFiles(request);
+        List<FileObject> fileObjectList = fileService.listFiles(request);
         ModelAndView modelAndView = new ModelAndView("directory");
         modelAndView.addObject("listFiles", fileObjectList);
         return modelAndView;

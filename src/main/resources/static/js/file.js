@@ -3,8 +3,6 @@ $(document).ready(function () {
     newUrl = location.protocol+'//'+location.host + newUrl
     $('#goto').attr('href', newUrl).html(newUrl);
 
-    checkFormat();
-
     $('.file').change(readFileContent);
 
     $('.data').blur(checkFormat);
@@ -30,7 +28,8 @@ $(document).ready(function () {
     });
 });
 
-function loadJSON(text) {
+function loadJSON(data) {
+    var text = data?JSON.stringify(data):'';
     $('.data').html('<pre>'+text+'</pre>');
     checkFormat();
 }

@@ -1,8 +1,8 @@
-package com.idearfly.decouple.controller.http;
+package com.idearfly.decouple.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.idearfly.decouple.Configuration;
-import com.idearfly.decouple.service.HttpService;
+import com.idearfly.decouple.DecoupleConfiguration;
+import com.idearfly.decouple.service.FileService;
 import com.idearfly.decouple.vo.FileObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,11 @@ import java.io.File;
 import java.util.List;
 
 @RestController
-@RequestMapping(Configuration.httpManager)
+@RequestMapping(DecoupleConfiguration.httpManager)
 @CrossOrigin
-public class HttpManagerController {
+public class ManagerController {
     @Autowired
-    private HttpService httpService;
+    private FileService fileService;
 
     /**
      * 重命名资源
@@ -26,7 +26,7 @@ public class HttpManagerController {
     @PostMapping("/rename")
     @ResponseBody
     public Boolean rename(HttpServletRequest request, @RequestParam String from, @RequestParam String to) {
-        return httpService.rename(request, from, to);
+        return fileService.rename(request, from, to);
     }
 
     /**
@@ -37,7 +37,7 @@ public class HttpManagerController {
     @ResponseBody
     public JSONObject put(HttpServletRequest request, @RequestParam("data") String data) {
         JSONObject jsonObject = JSONObject.parseObject(data);
-        httpService.writeJSONObject(request, jsonObject);
+        fileService.writeJSONObject(request, jsonObject);
 
         return jsonObject;
     }
@@ -49,7 +49,7 @@ public class HttpManagerController {
     @DeleteMapping("/**")
     @ResponseBody
     public Boolean delete(HttpServletRequest request) {
-        return httpService.delete(request);
+        return fileService.delete(request);
     }
 
     /**
@@ -58,39 +58,35 @@ public class HttpManagerController {
      */
     @GetMapping("/**")
     public ModelAndView get(HttpServletRequest request) {
-        String currentPath = httpService.filePath(request);
+        String currentPath = fileService.filePath(request);
         File currentFile = new File(currentPath);
         if (currentFile.isDirectory()) {
-            return directory(request);
+            return directory(currentFile);
         } else{
-            return file(request);
+            return file(currentFile);
         }
     }
 
     /**
      * 文件视图
-     * @param request
+     * @param file
      * @return
      */
-    private ModelAndView file(HttpServletRequest request) {
-        JSONObject jsonObject = httpService.readJSONObject(request);
-        String JSONString = "";
-        if (jsonObject != null) {
-            JSONString = jsonObject.toJSONString();
-        }
+    private ModelAndView file(File file) {
+        JSONObject jsonObject = fileService.readJSONObject(file);
         ModelAndView modelAndView = new ModelAndView("file");
-        modelAndView.addObject("data", JSONString);
+        modelAndView.addObject("data", jsonObject);
         return modelAndView;
     }
 
 
     /**
      * 目录视图
-     * @param request
+     * @param file
      * @return
      */
-    private ModelAndView directory(HttpServletRequest request) {
-        List<FileObject> fileObjectList = httpService.listFiles(request);
+    private ModelAndView directory(File file) {
+        List<FileObject> fileObjectList = fileService.listFiles(file);
         ModelAndView modelAndView = new ModelAndView("directory");
         modelAndView.addObject("listFiles", fileObjectList);
         return modelAndView;

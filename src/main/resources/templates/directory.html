@@ -22,13 +22,13 @@
     <ul class="directory">
         <li class="file"
             th:each="fileObject:${listFiles}"
-            th:attr="filename=${fileObject.name}, filetype=${fileObject.type}"
+            th:attr="filename=${fileObject.filename}, filetype=${fileObject.type}, fileext=${fileObject.ext}"
             onmouseover="showExtend(this)"
             onmouseout="hideExtend(this)">
             <div class="base" onclick="entryFile(this)">
-                <img src="/images/file.svg" class="icon" th:if="${fileObject.type}" />
-                <img src="/images/directory.svg" class="icon" th:if="!${fileObject.type}" />
-                <input class="name" disabled th:value="${fileObject.name}" onblur="disableInput(this)" onchange="renameFile(this)" />
+                <img th:src="${fileSupport[fileObject.ext]==null?'/images/file.svg':fileSupport[fileObject.ext].icon}" class="icon" th:if="${fileObject.type}" />
+                <img src="/images/directory.svg" class="icon" th:unless="${fileObject.type}" />
+                <input class="name" disabled th:value="${fileSupport[fileObject.ext]==null?fileObject.filename:fileObject.name}" onblur="disableInput(this)" onchange="renameFile(this)" />
             </div>
             <div class="extend">
                 <img src="/images/delete.svg" title="删除" class="icon" onclick="removeFile(this);" />
@@ -40,8 +40,7 @@
 <script th:inline="javascript">
 var httpManager=[[${httpManager}]];
 var httpApi=[[${httpApi}]];
-var wsManager=[[${wsManager}]];
-var wsApi=[[${wsApi}]];
+var fileSupport=[[${fileSupport}]];
 </script>
 </body>
 </html>

@@ -6,8 +6,16 @@ function entryFile($this) {
     var parent = $($this).parents('.file');
     var filename = parent.attr('filename');
     var current = location.pathname;
+    var fileext = parent.attr('fileext');
+    var support = fileSupport[fileext];
+    var name = filename;
+    if (support) {
+        var reg = new RegExp('^'+httpManager, 'g');
+        current = current.replace(reg, support.manager);
+        name = filename.substring(0, filename.lastIndexOf('.'));
+    }
     current = current.replace(/\/$/, '');
-    location.pathname = current + '/' + filename;
+    location.pathname = current + '/' + name;
 }
 
 function showExtend($this) {
@@ -55,6 +63,11 @@ function renameFile($this) {
     var to = self.val();
     var parent = self.parents('.file');
     var filename = parent.attr('filename');
+    var fileext = parent.attr('fileext');
+    var support = fileSupport[fileext];
+    if (support) {
+        to += '.'+fileext;
+    }
     request({
         url: httpManager+'/rename',
         data: {
@@ -68,7 +81,11 @@ function renameFile($this) {
                 parent.attr('filename', to);
             } else {
                 alert('重命名失败');
-                self.val(filename);
+                var name = filename;
+                if (support) {
+                    var name = filename.substring(0, filename.lastIndexOf('.'));
+                }
+                self.val(name);
             }
         }
     });

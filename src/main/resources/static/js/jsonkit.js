@@ -70,10 +70,14 @@ function JSONColor(opt) {
     var text=opt.text;
     var ErrorId=opt.ErrorId;
 
-    var Canvas = document.getElementById(CanvasId);
-    var Error = document.getElementById(ErrorId);
+    var Canvas = opt.Canvas || document.getElementById(CanvasId);
+    var Error = opt.Error ||  document.getElementById(ErrorId);
     try {
-        Canvas.innerHTML = '<pre>'+text+'</pre>';
+        if (text) {
+            Canvas.innerHTML = '<pre>'+text+'</pre>';
+        } else {
+            text = Canvas.innerText;
+        }
 
         var json = text.replace(/\u00A0/g, "$1");//过滤特殊字符
 
@@ -83,11 +87,25 @@ function JSONColor(opt) {
         }
         var html = JSONColorObject(obj, 0, false, false, false);
         Canvas.innerHTML = "<PRE class='CodeContainer'>" + html + "</PRE>";
+        Canvas.addEventListener('keydown', function (event){
+            switch(event.keyCode) {
+            case 9:// tab
+                event.preventDefault();
+                insertHtmlAtCaret(window.TAB);
+                break;
+            }
+        }, false);
         if (ErrorId) {
             Error.className = 'Good';
             Error.innerHTML = '格式正确';
         }
+        if (opt.onsuccess) {
+            opt.onsuccess(obj);
+        }
     } catch(e) {
+        if (opt.onerror) {
+            opt.onerror(e);
+        }
         //console.error(e);
         if (ErrorId) {
             Error.className = 'Bad';
@@ -187,3 +205,38 @@ function GetRow(indent, data, isPropertyContent) {
     }
     return tabs + data;
 };
+
+/**
+* contenteditable insert HTML
+*/
+    function insertHtmlAtCaret(html) {
+        var sel, range;
+        if (window.getSelection) {
+            // IE9 and non-IE
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+                // Range.createContextualFragment() would be useful here but is
+                // non-standard and not supported in all browsers (IE9, for one)
+                var el = document.createElement("div");
+                el.innerHTML = html;
+                var frag = document.createDocumentFragment(), node, lastNode;
+                while ((node = el.firstChild)) {
+                    lastNode = frag.appendChild(node);
+                }
+                range.insertNode(frag);
+                // Preserve the selection
+                if (lastNode) {
+                    range = range.cloneRange();
+                    range.setStartAfter(lastNode);
+                    range.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+        } else if (document.selection && document.selection.type != "Control") {
+            // IE < 9
+            document.selection.createRange().pasteHTML(html);
+        }
+    }

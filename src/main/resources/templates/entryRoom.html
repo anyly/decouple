@@ -8,10 +8,11 @@
     <script src="/js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="/css/base.css" type="text/css" />
     <script src="/js/base.js"></script>
-    <link rel="stylesheet" href="/css/file.css" type="text/css" />
-    <script src="/js/file.js"></script>
+    <link rel="stylesheet" href="/css/entryRoom.css" type="text/css" />
+    <script src="/js/entryRoom.js"></script>
     <link rel="stylesheet" href="/css/jsonkit.css" type="text/css" />
     <script src="/js/jsonkit.js"></script>
+    <script src="/js/eq.js"></script>
 </head>
 <body>
 <div class="container">
@@ -24,19 +25,37 @@
     <div class="bar">&nbsp;
         <div>API <a id="goto" target="_blank" href=""></a></div>
     </div>
-    <div class="fileManager">
-        <input class="file" type="file" />
-    </div>
-    <div class="form">
-        <p class="message">
-            <span class="status">状态：<span id="status">新建</span></span>
+    <ul class="list">
+        <li class="item right">
+            <img class="avatar" src="/images/avatar.svg"/>
+            <div class="message">
+                <p class="name">张三</p>
+                <pre class="content">你说我听</pre>
+            </div>
+
+        </li>
+        <li class="item left">
+            <img class="avatar" src="/images/avatar.svg"/>
+            <div class="message">
+                <p class="name">张三</p>
+                <pre class="content">你说我听</pre>
+            </div>
+        </li>
+    </ul>
+    <div class="footerbar">
+        <div class="toolbar">
+            <div class="row">
+                <spann>消息模板：</spann>
+                <select id="template" onchange="loadTemplate(this)">
+                    <option value="">请选择</option>
+                </select>
+            </div>
             <span id="error"></span>
-        </p>
-        <pre id="data" class="data Canvas" name="data"
+        </div>
+        <pre id="data" class="data"
              contenteditable="true"
-             placeholder="填写或选择文件json内容提交，用以保存">
-        </pre>
-        <input class="submit" type="button" value="提交" />
+             placeholder="请输入发送内容"></pre>
+        <div class="submit">发送</div>
     </div>
 </div>
 <script th:inline="javascript">
@@ -45,7 +64,7 @@ var httpApi=[[${httpApi}]];
 var fileSupport=[[${fileSupport}]];
 </script>
 <script th:inline="javascript">
-    loadData([[${data}]]);
+initData([[${data}]]);
 </script>
 </body>
 </html>

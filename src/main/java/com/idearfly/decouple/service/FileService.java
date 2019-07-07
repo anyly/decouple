@@ -2,21 +2,25 @@ package com.idearfly.decouple.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.util.IOUtils;
-import com.idearfly.decouple.Configuration;
+import com.idearfly.decouple.DecoupleConfiguration;
 import com.idearfly.decouple.vo.FileObject;
+import com.idearfly.decouple.vo.FileSupport;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
-public class HttpService {
+public class FileService {
     private static final String RootDirectory = System.getProperty("user.dir");
     private static final String ApiDirectory;
     static {
-        ApiDirectory = RootDirectory + Configuration.httpApi;
+        ApiDirectory = RootDirectory + DecoupleConfiguration.httpApi;
 
         System.out.println("ApiDirectory: " + ApiDirectory);
 
@@ -31,7 +35,15 @@ public class HttpService {
     }
 
     public String filePath(String servletPath) {
-        String path = servletPath.replaceAll("^"+ Configuration.httpManager, Configuration.httpApi);
+        for (Map.Entry<String, FileSupport> entry: DecoupleConfiguration.FileSupport.entrySet()) {
+            FileSupport fileSupport = entry.getValue();
+            Pattern pattern = Pattern.compile(fileSupport.getManager());
+            Matcher matcher = pattern.matcher(servletPath);
+            if (matcher.lookingAt()) {
+                return RootDirectory + matcher.replaceFirst(DecoupleConfiguration.httpApi) + "." +entry.getKey();
+            }
+        }
+        String path = servletPath.replaceAll("^"+ DecoupleConfiguration.httpManager, DecoupleConfiguration.httpApi);
         return RootDirectory + path;
     }
 
@@ -97,9 +109,17 @@ public class HttpService {
 
     public JSONObject readJSONObject(HttpServletRequest request) {
         String path = filePath(request);
+        return readJSONObject(path);
+    }
+
+    public JSONObject readJSONObject(String path) {
+        return readJSONObject(new File(path));
+    }
+
+    public JSONObject readJSONObject(File file) {
         FileInputStream fileInputStream = null;
         try {
-            fileInputStream = new FileInputStream(path);
+            fileInputStream = new FileInputStream(file);
             JSONObject jsonObject = JSONObject.parseObject(
                     fileInputStream,
                     IOUtils.UTF8,
@@ -120,8 +140,47 @@ public class HttpService {
 
     }
 
+    public JSONObject writeJSONObjectProperty(
+            HttpServletRequest request,
+            String oldKey,
+            String newKey,
+            JSONObject jsonObject) {
+        String path = filePath(request);
+        JSONObject oldJSONObject = readJSONObject(path);
+        if (oldJSONObject == null) {
+            oldJSONObject = new JSONObject();
+        } else {
+            if (oldKey == null || oldKey.length() > 0) {
+                oldJSONObject.remove(oldKey);
+            }
+        }
+        oldJSONObject.put(newKey, jsonObject);
+        writeJSONObject(path, oldJSONObject);
+        return oldJSONObject;
+    }
+
+    public JSONObject deleteProperty(
+            HttpServletRequest request,
+            String key) {
+        String path = filePath(request);
+        JSONObject oldJSONObject = readJSONObject(path);
+        if (oldJSONObject == null) {
+            return new JSONObject();
+        } else {
+            if (key == null || key.length() > 0) {
+                oldJSONObject.remove(key);
+            }
+        }
+        writeJSONObject(path, oldJSONObject);
+        return oldJSONObject;
+    }
+
     public void writeJSONObject(HttpServletRequest request, JSONObject jsonObject) {
         String path = filePath(request);
+        writeJSONObject(path, jsonObject);
+    }
+
+    public void writeJSONObject(String path, JSONObject jsonObject) {
         File file = new File(path);
         mkdirs(file);
 
@@ -146,7 +205,14 @@ public class HttpService {
 
     public List<FileObject> listFiles(HttpServletRequest request) {
         String path = filePath(request);
-        File file = new File(path);
+        return listFiles(path);
+    }
+
+    public List<FileObject> listFiles(String path) {
+        return listFiles(new File(path));
+    }
+
+    public List<FileObject> listFiles(File file) {
         if (!file.isDirectory()) {
             return null;
         }
@@ -154,9 +220,10 @@ public class HttpService {
         List<FileObject> list = new ArrayList<>(files.length);
         for (File f: files) {
             FileObject fileObject = new FileObject();
-            fileObject.setName(f.getName());
+            fileObject.setFilename(f.getName());
             fileObject.setPath(f.getPath());
             fileObject.setType(f.isFile());
+            extraFileObject(fileObject);
             list.add(fileObject);
         }
         return list;
@@ -198,5 +265,17 @@ public class HttpService {
         if (!parentFile.exists()) {
             parentFile.mkdirs();
         }
+    }
+
+    private void extraFileObject(FileObject fileObject) {
+        String filename = fileObject.getFilename();
+        int dot = filename.lastIndexOf('.');
+        if (dot < 0) {
+            fileObject.setName(filename);
+            fileObject.setExt("");
+            return;
+        }
+        fileObject.setName(filename.substring(0, dot));
+        fileObject.setExt(filename.substring(dot + 1));
     }
 }
