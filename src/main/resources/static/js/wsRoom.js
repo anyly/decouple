@@ -1,11 +1,14 @@
 $(document).ready(function () {
 (function() {
     var support = fileSupport['ws'];
-    var newText = location.pathname.replace('/wsRoom', support.api);
-    var newUrl = location.pathname.replace(support.manager, '/wsRoom');
-    newText = location.protocol+'//'+location.host + newText;
-    newUrl = location.protocol+'//'+location.host + newUrl;
+    var newUrl = location.pathname.replace('/wsRoom', support.manager);
+    var newText = '返回配置页面';
+    newUrl = location.protocol+'//'+location.host + newUrl + location.search;
     $('#goto').attr('href', newUrl).html(newText);
+
+    var path = $('.path').val();
+    path = path.replace(/^\/wsRoom/g, '');
+    $('.path').val(path);
 })();
 
 $('.submit').click(function() {

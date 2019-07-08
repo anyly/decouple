@@ -22,8 +22,9 @@ function request(opt) {
 }
 
 function parentPath() {
-    var reg = RegExp("^(?:"+regManager()+")(/?.*)/(.+$)?", 'g');
-    var url = location.pathname.replace(reg, "$1");
+    var path = $('.path').val();
+    var reg = RegExp("^(/?.*)/(.+$)?", 'g');
+    var url = path.replace(reg, "$1");
     location.pathname = httpManager+url;
 }
 

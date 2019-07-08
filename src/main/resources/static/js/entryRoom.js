@@ -3,9 +3,13 @@ $(document).ready(function () {
     var support = fileSupport['ws'];
     var newText = location.pathname.replace('/wsRoom', support.api);
     var newUrl = location.pathname.replace(support.manager, '/wsRoom');
-    newText = location.protocol+'//'+location.host + newText;
-    newUrl = location.protocol+'//'+location.host + newUrl;
+    newText = location.protocol+'//'+location.host + newText + location.search;
+    newUrl = 'ws://'+location.host + newUrl + location.search;
     $('#goto').attr('href', newUrl).html(newText);
+
+    var path = $('.path').val();
+    path = path.replace(/^\/wsRoom/g, '');
+    $('.path').val(path);
 })();
 
 $('#data').blur(checkFormat);

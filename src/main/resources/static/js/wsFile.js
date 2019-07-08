@@ -1,9 +1,9 @@
 $(document).ready(function () {
 (function() {
     var support = fileSupport['ws'];
-    var newText = location.pathname.replace(support.manager, support.api);
+//    var newText = location.pathname.replace(support.manager, support.api);
     var newUrl = location.pathname.replace(support.manager, '/wsRoom');
-    newText = location.protocol+'//'+location.host + newText;
+    var newText = '运行';
     newUrl = location.protocol+'//'+location.host + newUrl;
     $('#goto').attr('href', newUrl).html(newText);
 })()
