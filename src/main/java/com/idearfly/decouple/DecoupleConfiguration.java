@@ -17,7 +17,7 @@ public class DecoupleConfiguration implements WebMvcConfigurer {
 
     public static final String httpManager = "/manager";
 
-    public static final String httpApi = "/http";
+    public static final String httpApi = "/api";
 
     public static Map<String, FileSupport> FileSupport = new HashMap<>();
 
