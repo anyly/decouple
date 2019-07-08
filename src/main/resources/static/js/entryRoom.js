@@ -1,11 +1,7 @@
 $(document).ready(function () {
 (function() {
-    var support = fileSupport['ws'];
-    var newText = location.pathname.replace('/wsRoom', support.api);
-    var newUrl = location.pathname.replace(support.manager, '/wsRoom');
-    newText = location.protocol+'//'+location.host + newText + location.search;
-    newUrl = 'ws://'+location.host + newUrl + location.search;
-    $('#goto').attr('href', newUrl).html(newText);
+    window.wsURL = "ws://"+ location.host + location.pathname.replace(/^\/wsRoom/g, '/ws') + location.search;
+    $('#goto').attr('href', wsURL).html(wsURL);
 
     var path = $('.path').val();
     path = path.replace(/^\/wsRoom/g, '');
@@ -17,8 +13,7 @@ $('#data').blur(checkFormat);
 $('.submit').click(sendMessage);
 
 (function() {
-    var url = "ws://"+ location.host + location.pathname.replace(/^\/wsRoom/g, '/ws') + location.search;
-    var websocket = new WebSocket(url);
+    var websocket = new WebSocket(wsURL);
     websocket.onopen=function (event) {
         console.log('onopen');
     };
