@@ -24,7 +24,7 @@ public class WsApiController {
      * 读取数据
      * @return
      */
-    @GetMapping("/**")
+    @RequestMapping("/**")
     @ResponseBody
     public ModelAndView entry(
             HttpServletRequest request,

@@ -18,7 +18,7 @@ public class ApiController {
      * 读取数据
      * @return
      */
-    @GetMapping("/**")
+    @RequestMapping("/**")
     @ResponseBody
     public String getData(HttpServletRequest request) {
         return fileService.readContent(request);
