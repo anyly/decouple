@@ -92,11 +92,11 @@ function sendMessage() {
         alert('请输入json文本！');
         return;
     }
-    var message = {
+    var message = JSON.parse(data);
+    message.meta = {
         from: window.name,
         to: 'all',
-        avatar: null,
-        content: JSON.parse(data)
+        avatar: null
     };
     loadMessage(message);
     sendMessage(message);
@@ -122,20 +122,27 @@ function loadMessage(message) {
 }
 */
 function messageDom(message) {
+    var data = JSON.parse(JSON.stringify(message));
+    var meta = data.meta;
+    delete data.meta;
+
     var css = 'left';
-    var name = message.from;
-    if (name == window.name) {
-        css = 'right';
-        //name = '';
-    }
     var avatar = '/images/avatar.svg';
-    if (message.avatar) {
-        avatar = message.avatar;
+    var name = '匿名';
+    if (meta) {
+
+        name = meta.from;
+        if (name == window.name) {
+            css = 'right';
+        }
+
+        if (meta.avatar) {
+            avatar = meta.avatar;
+        }
     }
-    var content = '';
-    if (message.content) {
-        content = JSON.stringify(message.content);
-    }
+
+
+    var content = JSON.stringify(data);
     dom = $('<li class="item '+css+'">\
                           <img class="avatar" src="'+avatar+'"/>\
                           <div class="message">\
