@@ -93,7 +93,7 @@ function sendMessage() {
         return;
     }
     var message = JSON.parse(data);
-    message.meta = {
+    message.__ = {
         from: window.name,
         to: 'all',
         avatar: null
@@ -123,21 +123,21 @@ function loadMessage(message) {
 */
 function messageDom(message) {
     var data = JSON.parse(JSON.stringify(message));
-    var meta = data.meta;
-    delete data.meta;
+    var __ = data.__;
+    delete data.__;
 
     var css = 'left';
     var avatar = '/images/avatar.svg';
     var name = '匿名';
-    if (meta) {
+    if (__) {
 
-        name = meta.from;
+        name = __.from;
         if (name == window.name) {
             css = 'right';
         }
 
-        if (meta.avatar) {
-            avatar = meta.avatar;
+        if (__.avatar) {
+            avatar = __.avatar;
         }
     }
 
