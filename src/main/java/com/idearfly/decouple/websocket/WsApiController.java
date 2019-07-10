@@ -15,7 +15,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/wsRoom")
-@CrossOrigin
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class WsApiController {
     @Autowired
     private FileService fileService;

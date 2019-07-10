@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(DecoupleConfiguration.httpApi)
-@CrossOrigin
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class ApiController {
     @Autowired
     private FileService fileService;

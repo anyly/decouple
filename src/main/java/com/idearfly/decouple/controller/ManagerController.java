@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(DecoupleConfiguration.httpManager)
-@CrossOrigin
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class ManagerController {
     @Autowired
     private FileService fileService;

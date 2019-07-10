@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wsManager")
-@CrossOrigin
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class WsManagerController {
     @Autowired
     private FileService fileService;
