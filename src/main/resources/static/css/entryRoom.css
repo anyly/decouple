@@ -124,3 +124,12 @@
     width: 25px;
     height: 25px;
 }
+.disconnected {
+    color: #999;
+}
+.connected {
+    color: green;
+}
+.exception {
+    color: red;
+}

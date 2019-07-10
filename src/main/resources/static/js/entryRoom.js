@@ -15,7 +15,9 @@ $('.submit').click(sendMessage);
 (function() {
     var websocket = new WebSocket(wsURL);
     websocket.onopen=function (event) {
-        console.log('onopen');
+        var status = document.getElementById('status');
+        status.innerHTML='已连接';
+        status.className='connected';
     };
     websocket.onmessage=function (event) {
         // 收到消息去加载
@@ -24,10 +26,14 @@ $('.submit').click(sendMessage);
         loadMessage(message);
     };
     websocket.onerror=function (event) {
-        console.log('onerror');
+        var status = document.getElementById('status');
+        status.innerHTML=event.toString();
+        status.className='exception';
     };
     websocket.onclose=function (event) {
-        console.log('onclose');
+        var status = document.getElementById('status');
+        status.innerHTML='已断开';
+        status.className='disconnected';
     };
     window.sendMessage=function (data) {
         var text = JSON.stringify(data);
@@ -72,6 +78,10 @@ function checkFormat() {
 }
 
 function sendMessage() {
+    if ($('#status').hasClass('disconnected')) {
+        alert('已断开连接，请刷新页面！');
+        return;
+    }
     var error = $('#error');
     if (error.hasClass('Bad')) {
         alert(error.text());

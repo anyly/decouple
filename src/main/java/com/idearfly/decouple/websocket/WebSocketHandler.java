@@ -6,6 +6,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -89,20 +90,43 @@ public class WebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        if (!pingPong(session, message)) {
+            return;
+        }
         Map<String, Object> attributes = session.getAttributes();
         String name = (String) attributes.getOrDefault("name", "");
         String topic = (String) attributes.getOrDefault("topic", "");
         String usecase = (String) attributes.getOrDefault("usecase", "");
         try {
+            System.out.println("up>>>>["+name+"]>>>>["+message.getPayload().toString()+"]");
             Set<String> userOfTopic = TopicMap.get(topic).get(usecase);
             for (String user: userOfTopic) {
                 if (!user.equals(name)) {
                     ClientMap.get(user).sendMessage(message);
+                    System.out.println("down>>>>["+user+"]>>>>["+message.getPayload().toString()+"]");
                 }
             }
         } catch (Exception ignored) {
-
+            ignored.printStackTrace();
         }
         super.handleTextMessage(session, message);
+    }
+
+    private boolean pingPong(
+            WebSocketSession session,
+            TextMessage message) throws IOException {
+        Map<String, Object> attributes = session.getAttributes();
+        String name = (String) attributes.getOrDefault("name", "");
+        JSONObject json = JSONObject.parseObject(message.getPayload());
+        String type = json.getString("type");
+        if (type != null && type.equals("heartbeatReq")) {
+            //System.out.println("ping>>>>["+name+"]>>>>["+message.getPayload().toString()+"]");
+            json.put("type", "heartbeatRes");
+            TextMessage textMessage = new TextMessage(json.toJSONString());
+            session.sendMessage(textMessage);
+            //System.out.println("pong>>>>["+name+"]>>>>["+textMessage.getPayload().toString()+"]");
+            return false;
+        }
+        return true;
     }
 }
